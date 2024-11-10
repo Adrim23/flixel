@@ -1146,6 +1146,11 @@ class FlxSprite extends FlxObject
 	public function transformScreenToPixels(screenPoint:FlxPoint, ?camera:FlxCamera, ?result:FlxPoint):FlxPoint
 	{
 		result = getScreenPosition(result, camera);
+		if (alt)
+		{
+			origin = new FlxPoint(0, 0);
+			this.updateHitbox();
+		}
 		
 		result.subtract(screenPoint.x, screenPoint.y);
 		result.negate();
