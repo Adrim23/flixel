@@ -834,7 +834,7 @@ class FlxObject extends FlxBasic
 	/**
 	 * downscroll doesnt affect sprite
 	 */
-	var alt:Bool;
+	public var alt:Bool;
 
 	@:noCompletion
 	var _point:FlxPoint = FlxPoint.get();
