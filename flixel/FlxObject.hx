@@ -1136,7 +1136,8 @@ class FlxObject extends FlxBasic
 		if (pixelPerfectPosition)
 			result.floor();
 
-		return result.subtract(camera.scroll.x * scrollFactor.x, camera.scroll.y * scrollFactor.y);
+		result.subtract(camera.scroll.x * scrollFactor.x, camera.scroll.y * scrollFactor.y);
+		return camera.alterScreenPosition(this, result);
 	}
 
 	/**
