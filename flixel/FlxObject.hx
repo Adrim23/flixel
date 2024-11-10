@@ -831,6 +831,11 @@ class FlxObject extends FlxBasic
 	 */
 	public var path(default, set):FlxPath = null;
 
+	/**
+	 * downscroll doesnt affect sprite
+	 */
+	var alt:Bool;
+
 	@:noCompletion
 	var _point:FlxPoint = FlxPoint.get();
 	@:noCompletion
@@ -842,7 +847,7 @@ class FlxObject extends FlxBasic
 	 * @param   Width    Desired width of the rectangle.
 	 * @param   Height   Desired height of the rectangle.
 	 */
-	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0)
+	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0, allowDown:Bool = true)
 	{
 		super();
 
@@ -850,6 +855,7 @@ class FlxObject extends FlxBasic
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.alt = allowDown;
 
 		initVars();
 	}
@@ -1137,7 +1143,10 @@ class FlxObject extends FlxBasic
 			result.floor();
 
 		result.subtract(camera.scroll.x * scrollFactor.x, camera.scroll.y * scrollFactor.y);
-		return camera.alterScreenPosition(this, result);
+		if (alt)
+			return camera.alterScreenPosition(this, result);
+		else
+			return result.subtract(camera.scroll.x * scrollFactor.x, camera.scroll.y * scrollFactor.y);
 	}
 
 	/**

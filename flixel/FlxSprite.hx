@@ -368,11 +368,12 @@ class FlxSprite extends FlxObject
 	 * @param   X               The initial X position of the sprite.
 	 * @param   Y               The initial Y position of the sprite.
 	 * @param   SimpleGraphic   The graphic you want to display
+	 * @param   ignoreAlterScreen   If the sprite follows the camera downscroll
 	 *                          (OPTIONAL - for simple stuff only, do NOT use for animated images!).
 	 */
-	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset)
+	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset, ?allowDownscroll:Bool = true)
 	{
-		super(X, Y);
+		super(X, Y, 0, 0, allowDownscroll);
 
 		useFramePixels = FlxG.renderBlit;
 		if (SimpleGraphic != null)
