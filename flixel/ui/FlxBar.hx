@@ -52,6 +52,7 @@ class FlxBar extends FlxSprite
 	/**
 	 * The percentage of how full the bar is (a value between 0 and 100)
 	 */
+	@:isVar
 	public var percent(get, set):Float;
 
 	/**
