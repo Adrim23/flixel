@@ -761,7 +761,7 @@ class FlxBar extends FlxSprite
 		_filledBarRect.height = barHeight;
 
 		var fraction:Float = (value - min) / range;
-		var percent:Float = fraction * _maxPercent;
+		percent = fraction * _maxPercent;
 		var maxScale:Float = (_fillHorizontal) ? barWidth : barHeight;
 		var scaleInterval:Float = maxScale / numDivisions;
 		var interval:Float = Math.round(Std.int(fraction * maxScale / scaleInterval) * scaleInterval);
