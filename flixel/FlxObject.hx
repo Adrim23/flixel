@@ -836,6 +836,16 @@ class FlxObject extends FlxBasic
 	 */
 	public var alt:Bool;
 
+	/**
+	 * dowscroll offsetX
+	 */
+	public var offsetX:Float = 0;
+	
+	/**
+	 * dowscroll offsetY
+	 */
+	public var offsetY:Float = 0;
+
 	@:noCompletion
 	var _point:FlxPoint = FlxPoint.get();
 	@:noCompletion
