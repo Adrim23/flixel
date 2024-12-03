@@ -1,8 +1,5 @@
 package flixel.util;
 
-#if macro
-import haxe.macro.Expr;
-#else
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 typedef FlxSignal = FlxTypedSignal<Void->Void>;
@@ -283,7 +280,6 @@ interface IFlxSignal<T> extends IFlxDestroyable
 	function destroy():Void;
 	function has(listener:T):Bool;
 }
-#end
 
 class Macro
 {
