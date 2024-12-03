@@ -80,7 +80,7 @@ abstract FlxTypedSignal<T>(IFlxSignal<T>)
 	}
 }
 
-class FlxSignalHandler<T> implements IFlxDestroyable
+private class FlxSignalHandler<T> implements IFlxDestroyable
 {
 	public var listener:T;
 	public var dispatchOnce(default, null):Bool = false;
@@ -97,7 +97,7 @@ class FlxSignalHandler<T> implements IFlxDestroyable
 	}
 }
 
-class FlxBaseSignal<T> implements IFlxSignal<T>
+private class FlxBaseSignal<T> implements IFlxSignal<T>
 {
 	/**
 	 * Typed function reference used to dispatch this signal.
@@ -137,7 +137,7 @@ class FlxBaseSignal<T> implements IFlxSignal<T>
 			}
 		}
 	}
-
+	
 	inline function removeHandler(handler:FlxSignalHandler<T>):Void
 	{
 		if (processingListeners)
@@ -203,7 +203,7 @@ class FlxBaseSignal<T> implements IFlxSignal<T>
 	}
 }
 
-class FlxSignal0 extends FlxBaseSignal<Void->Void>
+private class FlxSignal0 extends FlxBaseSignal<Void->Void>
 {
 	public function new()
 	{
@@ -217,7 +217,7 @@ class FlxSignal0 extends FlxBaseSignal<Void->Void>
 	}
 }
 
-class FlxSignal1<T1> extends FlxBaseSignal<T1->Void>
+private class FlxSignal1<T1> extends FlxBaseSignal<T1->Void>
 {
 	public function new()
 	{
@@ -231,7 +231,7 @@ class FlxSignal1<T1> extends FlxBaseSignal<T1->Void>
 	}
 }
 
-class FlxSignal2<T1, T2> extends FlxBaseSignal<T1->T2->Void>
+private class FlxSignal2<T1, T2> extends FlxBaseSignal<T1->T2->Void>
 {
 	public function new()
 	{
@@ -245,7 +245,7 @@ class FlxSignal2<T1, T2> extends FlxBaseSignal<T1->T2->Void>
 	}
 }
 
-class FlxSignal3<T1, T2, T3> extends FlxBaseSignal<T1->T2->T3->Void>
+private class FlxSignal3<T1, T2, T3> extends FlxBaseSignal<T1->T2->T3->Void>
 {
 	public function new()
 	{
@@ -259,7 +259,7 @@ class FlxSignal3<T1, T2, T3> extends FlxBaseSignal<T1->T2->T3->Void>
 	}
 }
 
-class FlxSignal4<T1, T2, T3, T4> extends FlxBaseSignal<T1->T2->T3->T4->Void>
+private class FlxSignal4<T1, T2, T3, T4> extends FlxBaseSignal<T1->T2->T3->T4->Void>
 {
 	public function new()
 	{
@@ -285,7 +285,7 @@ interface IFlxSignal<T> extends IFlxDestroyable
 }
 #end
 
-class Macro
+private class Macro
 {
 	public static macro function buildDispatch(exprs:Array<Expr>):Expr
 	{

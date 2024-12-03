@@ -81,9 +81,6 @@ class FlxSound extends FlxBasic
 	
 	/**
 	 * Pan amount. -1 = full left, 1 = full right. Proximity based panning overrides this.
-	 * 
-	 * Note: On desktop targets this only works with mono sounds, due to limitations of OpenAL.
-	 * More info: [OpenFL Forums - SoundTransform.pan does not work](https://community.openfl.org/t/windows-legacy-soundtransform-pan-does-not-work/6616/2?u=geokureli)
 	 */
 	public var pan(get, set):Float;
 	
@@ -117,8 +114,7 @@ class FlxSound extends FlxBasic
 	public var length(get, never):Float;
 	
 	/**
-	 * The sound group this sound belongs to, can only be in one group.
-	 * NOTE: This setter is deprecated, use `group.add(sound)` or `group.remove(sound)`.
+	 * The sound group this sound belongs to
 	 */
 	public var group(default, set):FlxSoundGroup;
 	
@@ -256,10 +252,6 @@ class FlxSound extends FlxBasic
 	
 	override public function destroy():Void
 	{
-		// Prevents double destroy
-		if (group != null)
-			group.remove(this);
-		
 		_transform = null;
 		exists = false;
 		active = false;
@@ -711,20 +703,24 @@ class FlxSound extends FlxBasic
 	}
 	#end
 	
-	@:deprecated("sound.group = myGroup is deprecated, use myGroup.add(sound)") // 5.7.0
-	function set_group(value:FlxSoundGroup):FlxSoundGroup
+	function set_group(group:FlxSoundGroup):FlxSoundGroup
 	{
-		if (value != null)
+		if (this.group != group)
 		{
-			// add to new group, also removes from prev and calls updateTransform
-			value.add(this);
+			var oldGroup:FlxSoundGroup = this.group;
+			
+			// New group must be set before removing sound to prevent infinite recursion
+			this.group = group;
+			
+			if (oldGroup != null)
+				oldGroup.remove(this);
+				
+			if (group != null)
+				group.add(this);
+				
+			updateTransform();
 		}
-		else
-		{
-			// remove from prev group, also calls updateTransform
-			group.remove(this);
-		}
-		return value;
+		return group;
 	}
 	
 	inline function get_playing():Bool
@@ -776,9 +772,7 @@ class FlxSound extends FlxBasic
 	
 	inline function set_pan(pan:Float):Float
 	{
-		_transform.pan = pan;
-		updateTransform();
-		return pan;
+		return _transform.pan = pan;
 	}
 	
 	inline function get_time():Float

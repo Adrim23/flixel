@@ -4,7 +4,7 @@ import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import flixel.system.debug.interaction.Interaction;
 import flixel.system.ui.FlxSystemButton;
-import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 /**
  * The base class of all tools in the interactive debug.
@@ -42,15 +42,15 @@ class Tool extends Sprite implements IFlxDestroyable
 		return _brain.activeTool == this && _brain.visible;
 	}
 
-	function setButton(icon:Class<BitmapData>):Void
+	function setButton(Icon:Class<BitmapData>):Void
 	{
-		button = new FlxSystemButton(Type.createInstance(icon, [0, 0]), onButtonClicked, true);
+		button = new FlxSystemButton(Type.createInstance(Icon, [0, 0]), onButtonClicked, true);
 		button.toggled = true;
 
-		var tooltipName = _name;
+		var tooltip = _name;
 		if (_shortcut != null)
-			tooltipName += ' ($_shortcut)';
-		Tooltip.add(button, tooltipName);
+			tooltip += ' ($_shortcut)';
+		Tooltip.add(button, tooltip);
 	}
 
 	/**

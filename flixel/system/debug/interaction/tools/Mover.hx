@@ -6,7 +6,7 @@ import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.system.debug.interaction.Interaction;
 
-#if FLX_DEBUG @:bitmap("assets/images/debugger/buttons/mover.png") #end
+@:bitmap("assets/images/debugger/buttons/mover.png")
 private class GraphicMoverTool extends BitmapData {}
 
 /**

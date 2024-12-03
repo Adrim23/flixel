@@ -11,7 +11,7 @@ import flixel.util.FlxSpriteUtil;
 
 using flixel.util.FlxArrayUtil;
 
-#if FLX_DEBUG @:bitmap("assets/images/debugger/cursorCross.png") #end
+@:bitmap("assets/images/debugger/cursorCross.png")
 class GraphicCursorCross extends BitmapData {}
 
 /**

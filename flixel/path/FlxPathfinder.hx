@@ -60,8 +60,8 @@ class FlxTypedPathfinder<Tilemap:FlxBaseTilemap<FlxObject>, Data:FlxTypedPathfin
 	public function findPath(map:Tilemap, start:FlxPoint, end:FlxPoint, simplify:FlxPathSimplifier = LINE):Null<Array<FlxPoint>>
 	{
 		// Figure out what tile we are starting and ending on.
-		final startIndex = map.getMapIndex(start);
-		final endIndex = map.getMapIndex(end);
+		var startIndex = map.getTileIndexByCoords(start);
+		var endIndex = map.getTileIndexByCoords(end);
 
 		var data = createData(map, startIndex, endIndex);
 		var indices = findPathIndicesHelper(data);
@@ -119,7 +119,7 @@ class FlxTypedPathfinder<Tilemap:FlxBaseTilemap<FlxObject>, Data:FlxTypedPathfin
 	function getPathPointsFromIndices(data:Data, indices:Array<Int>)
 	{
 		// convert indices to world coordinates
-		return indices.map((i)->data.map.getTilePos(i, true));
+		return indices.map(data.map.getTileCoordsByIndex.bind(_, true));
 	}
 
 	/**
@@ -617,8 +617,10 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 
 	public function hasValidStartEnd()
 	{
-		return map.tileExists(startIndex)
-			&& map.tileExists(endIndex);
+		return startIndex >= 0
+			&& endIndex >= 0
+			&& startIndex < map.totalTiles
+			&& endIndex < map.totalTiles;
 	}
 
 	public function destroy()
@@ -645,7 +647,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	 */
 	inline function getX(tile:Int)
 	{
-		return map.getColumn(tile);
+		return tile % map.widthInTiles;
 	}
 
 	/**
@@ -653,7 +655,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	 */
 	inline function getY(tile:Int)
 	{
-		return map.getRow(tile);
+		return Std.int(tile / map.widthInTiles);
 	}
 
 	/**
@@ -662,7 +664,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	inline function getTileCollisionsByIndex(tile:Int)
 	{
 		#if debug numChecks++; #end
-		return map.getTileData(tile).allowCollisions;
+		return map.getTileCollisions(map.getTileByIndex(tile));
 	}
 }
 

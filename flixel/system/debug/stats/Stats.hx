@@ -12,10 +12,10 @@ import flixel.system.debug.FlxDebugger.GraphicStats;
 import flixel.system.ui.FlxSystemButton;
 import flixel.util.FlxColor;
 
-#if FLX_DEBUG @:bitmap("assets/images/debugger/buttons/minimize.png") #end
+@:bitmap("assets/images/debugger/buttons/minimize.png")
 private class GraphicMinimizeButton extends BitmapData {}
 
-#if FLX_DEBUG @:bitmap("assets/images/debugger/buttons/maximize.png") #end
+@:bitmap("assets/images/debugger/buttons/maximize.png")
 private class GraphicMaximizeButton extends BitmapData {}
 
 /**
@@ -333,7 +333,7 @@ class Stats extends Window
 	 */
 	public inline function currentMem():Float
 	{
-		return (#if (openfl >= "9.4.0") System.totalMemoryNumber #else System.totalMemory #end / 1024) / 1000;
+		return (System.totalMemory / 1024) / 1000;
 	}
 
 	/**

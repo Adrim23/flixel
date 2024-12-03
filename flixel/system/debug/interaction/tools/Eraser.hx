@@ -7,7 +7,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.system.debug.interaction.Interaction;
 
-#if FLX_DEBUG @:bitmap("assets/images/debugger/buttons/eraser.png") #end
+@:bitmap("assets/images/debugger/buttons/eraser.png")
 private class GraphicEraserTool extends BitmapData {}
 
 /**

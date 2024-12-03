@@ -30,7 +30,7 @@ class Watch extends Window
 		entriesContainer.y = entriesContainerOffset.y;
 		addChild(entriesContainer);
 
-		FlxG.signals.preStateSwitch.add(clear);
+		FlxG.signals.preStateSwitch.add(removeAll);
 	}
 
 	public function add(displayName:String, data:WatchEntryData):Void
@@ -87,7 +87,7 @@ class Watch extends Window
 		var entry = new WatchEntry(displayName, data, removeEntry);
 		entries.push(entry);
 		entriesContainer.addChild(entry);
-		updateSize();
+		resetEntries();
 	}
 
 	public function remove(displayName:String, data:WatchEntryData):Void
@@ -102,27 +102,19 @@ class Watch extends Window
 		entries.fastSplice(entry);
 		entriesContainer.removeChild(entry);
 		entry.destroy();
-		updateSize();
-	}
-
-	/**
-	 * internal method to remove all without calling updateSize
-	 */
-	function clear():Void
-	{
-		for (entry in entries)
-		{
-			entriesContainer.removeChild(entry);
-			entry.destroy();
-		}
-		
-		entries.resize(0);
+		resetEntries();
 	}
 
 	public function removeAll():Void
 	{
-		clear();
-		updateSize();
+		for (i in 0...entries.length)
+		{
+			var entry = entries[i];
+			entriesContainer.removeChild(entry);
+			entry.destroy();
+		}
+		entries.splice(0, entries.length);
+		resetEntries();
 	}
 
 	override public function update():Void
@@ -133,10 +125,9 @@ class Watch extends Window
 
 	override function updateSize():Void
 	{
-		resetEntries();
 		minSize.setTo(getMaxMinWidth() + entriesContainerOffset.x, entriesContainer.height + entriesContainerOffset.y);
 		super.updateSize();
-		reposition(x, y);
+		resetEntries();
 	}
 
 	function resetEntries():Void
