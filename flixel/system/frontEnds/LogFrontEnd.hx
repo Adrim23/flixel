@@ -14,6 +14,7 @@ class LogFrontEnd
 	 * Whether everything you trace() is being redirected into the log window.
 	 */
 	public var redirectTraces(default, set):Bool = false;
+	public static var onLogs:Dynamic->LogStyle->Bool->Void;
 
 	var _standardTraceFunction:(Dynamic, ?PosInfos)->Void;
 
@@ -83,6 +84,8 @@ class LogFrontEnd
 		
 		if (style.throwException)
 			throw style.toLogString(data);
+		if (onLogs != null)
+			onLogs(Data, Style, FireOnce);
 	}
 
 	/**
