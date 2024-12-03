@@ -14,6 +14,7 @@ class LogFrontEnd
 	 * Whether everything you trace() is being redirected into the log window.
 	 */
 	public var redirectTraces(default, set):Bool = false;
+	public static var onLogs:Dynamic->LogStyle->Bool->Void;
 
 	var _standardTraceFunction:(Dynamic, ?PosInfos)->Void;
 
@@ -44,7 +45,8 @@ class LogFrontEnd
 	 * @param   style     The LogStyle to use, for example LogStyle.WARNING. You can also create your own by importing the LogStyle class.
 	 * @param   fireOnce  Whether you only want to log the Data in case it hasn't been added already
 	 */
-	public function advanced(data:Dynamic, ?style:LogStyle, fireOnce = false):Void
+	@:haxe.warning("-WDeprecated")
+	public function advanced(data:Any, ?style:LogStyle, fireOnce = false):Void
 	{
 		if (style == null)
 			style = LogStyle.NORMAL;
@@ -74,11 +76,16 @@ class LogFrontEnd
 			
 			if (style.callbackFunction != null)
 				style.callbackFunction();
+			
+			if (style.callback != null)
+				style.callback(data);
 		}
 		#end
 		
 		if (style.throwException)
 			throw style.toLogString(data);
+		if (onLogs != null)
+			onLogs(data, style, fireOnce);
 	}
 
 	/**
@@ -109,9 +116,9 @@ class LogFrontEnd
 	 * @param   data  The data that has been traced
 	 * @param   info  Information about the position at which trace() was called
 	 */
-	function processTraceData(data:Dynamic, ?info:PosInfos):Void
+	function processTraceData(data:Any, ?info:PosInfos):Void
 	{
-		var paramArray:Array<Dynamic> = [data];
+		var paramArray:Array<Any> = [data];
 
 		if (info.customParams != null)
 		{

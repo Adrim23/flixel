@@ -5,10 +5,12 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
-import flixel.system.FlxAssets;
 import flixel.sound.FlxSound;
 import flixel.sound.FlxSoundGroup;
+import flixel.system.FlxAssets;
 import flixel.system.ui.FlxSoundTray;
+import flixel.text.FlxInputText;
+import flixel.util.FlxSignal;
 import openfl.Assets;
 import openfl.media.Sound;
 #if (openfl >= "8.0.0")
@@ -35,7 +37,13 @@ class SoundFrontEnd
 	 * Set this hook to get a callback whenever the volume changes.
 	 * Function should take the form myVolumeHandler(volume:Float).
 	 */
+	@:deprecated("volumeHandler is deprecated, use onVolumeChange, instead")
 	public var volumeHandler:Float->Void;
+
+	/**
+	 * A signal that gets dispatched whenever the volume changes.
+	 */
+	public var onVolumeChange(default, null):FlxTypedSignal<Float->Void> = new FlxTypedSignal<Float->Void>();
 
 	#if FLX_KEYBOARD
 	/**
@@ -106,6 +114,9 @@ class SoundFrontEnd
 	 */
 	public function playMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup):Void
 	{
+		if (group == null)
+			group = defaultMusicGroup;
+		
 		if (music == null)
 		{
 			music = new FlxSound();
@@ -114,11 +125,11 @@ class SoundFrontEnd
 		{
 			music.stop();
 		}
-
+		
 		music.loadEmbedded(embeddedMusic, looped);
 		music.volume = volume;
 		music.persist = true;
-		music.group = (group == null) ? defaultMusicGroup : group;
+		group.add(music);
 		music.play();
 	}
 
@@ -180,14 +191,15 @@ class SoundFrontEnd
 
 	function loadHelper(sound:FlxSound, volume:Float, group:FlxSoundGroup, autoPlay = false):FlxSound
 	{
+		if (group == null)
+			group = defaultSoundGroup;
+		
 		sound.volume = volume;
-
+		group.add(sound);
+		
 		if (autoPlay)
-		{
 			sound.play();
-		}
-
-		sound.group = (group == null) ? defaultSoundGroup : group;
+		
 		return sound;
 	}
 
@@ -308,7 +320,7 @@ class SoundFrontEnd
 	{
 		if (music != null && (forceDestroy || !music.persist))
 		{
-			destroySound(music);
+			music.destroy();
 			music = null;
 		}
 
@@ -316,21 +328,15 @@ class SoundFrontEnd
 		{
 			if (sound != null && (forceDestroy || !sound.persist))
 			{
-				destroySound(sound);
+				sound.destroy();
 			}
 		}
-	}
-
-	function destroySound(sound:FlxSound):Void
-	{
-		defaultMusicGroup.remove(sound);
-		defaultSoundGroup.remove(sound);
-		sound.destroy();
 	}
 
 	/**
 	 * Toggles muted, also activating the sound tray.
 	 */
+	@:haxe.warning("-WDeprecated")
 	public function toggleMuted():Void
 	{
 		muted = !muted;
@@ -339,6 +345,8 @@ class SoundFrontEnd
 		{
 			volumeHandler(muted ? 0 : volume);
 		}
+
+		onVolumeChange.dispatch(muted ? 0 : volume);
 
 		showSoundTray(true);
 	}
@@ -387,12 +395,15 @@ class SoundFrontEnd
 			list.update(elapsed);
 
 		#if FLX_KEYBOARD
-		if (FlxG.keys.anyJustReleased(muteKeys))
-			toggleMuted();
-		else if (FlxG.keys.anyJustReleased(volumeUpKeys))
-			changeVolume(0.1);
-		else if (FlxG.keys.anyJustReleased(volumeDownKeys))
-			changeVolume(-0.1);
+		if (!FlxInputText.globalManager.isTyping)
+		{
+			if (FlxG.keys.anyJustReleased(muteKeys))
+				toggleMuted();
+			else if (FlxG.keys.anyJustReleased(volumeUpKeys))
+				changeVolume(0.1);
+			else if (FlxG.keys.anyJustReleased(volumeDownKeys))
+				changeVolume(-0.1);
+		}
 		#end
 	}
 
@@ -451,15 +462,18 @@ class SoundFrontEnd
 	}
 	#end
 
+	@:haxe.warning("-WDeprecated")
 	function set_volume(Volume:Float):Float
 	{
 		Volume = FlxMath.bound(Volume, 0, 1);
 
 		if (volumeHandler != null)
 		{
-			var param:Float = muted ? 0 : Volume;
-			volumeHandler(param);
+			volumeHandler(muted ? 0 : Volume);
 		}
+
+		onVolumeChange.dispatch(muted ? 0 : Volume);
+
 		return volume = Volume;
 	}
 }
