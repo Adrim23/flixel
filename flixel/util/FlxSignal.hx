@@ -1,5 +1,6 @@
 package flixel.util;
 
+import haxe.macro.Expr;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 typedef FlxSignal = FlxTypedSignal<Void->Void>;
