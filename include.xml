@@ -23,6 +23,7 @@
 	<haxelib name="hscript" unless="create || coverage2" optional="true" />
 	
 	<haxeflag name="--macro" value="flixel.system.macros.FlxDefines.run()" />
+	<set name="macro" value="false" />
 	
 	<section if="setup">
 		<haxelib name="hscript" />
