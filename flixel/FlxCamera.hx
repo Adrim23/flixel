@@ -28,7 +28,7 @@ import openfl.filters.ShaderFilter;
 
 using flixel.util.FlxColorTransformUtil;
 
-private typedef FlxDrawItem = flixel.graphics.tile.FlxDrawQuadsItem;
+typedef FlxDrawItem = flixel.graphics.tile.FlxDrawQuadsItem;
 
 /**
  * The camera class is used to display the game's visuals.
