@@ -707,6 +707,11 @@ class FlxSprite extends FlxObject
 	}
 
 	/**
+	 * Made in case developer wanna finalize stuff with the matrix.
+	 */
+	public function doAdditionalMatrixStuff(matrix:FlxMatrix, camera:FlxCamera) {}
+
+	/**
 	 * Called whenever a new graphic is loaded for this sprite (after `loadGraphic()`, `makeGraphic()` etc).
 	 */
 	public function graphicLoaded():Void {}
@@ -930,6 +935,8 @@ class FlxSprite extends FlxObject
 			_matrix.tx = Math.floor(_matrix.tx);
 			_matrix.ty = Math.floor(_matrix.ty);
 		}
+
+		doAdditionalMatrixStuff(_matrix, camera);
 
 		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
 	}
